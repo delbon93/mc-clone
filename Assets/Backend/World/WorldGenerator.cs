@@ -37,21 +37,20 @@ namespace BlockGame.Backend
             {
                 var blockToSet = BlockRegistry.Air;
                 var worldPos = chunk.GlobalIndex * Chunk.ChunkSize + Chunk.IndexToLocalBlockPos(i);
-                var currentHeight = (int)Mathf.Floor(chunk.IndexToGlobalBlockPos(i).y);
 
-                var threshold = 8 + Random.value < 0.2f ? Random.Range(-2, 2) : 0;
+                var threshold = -10 + Random.value < 0.2f ? Random.Range(-2, 2) : 0;
 
                 // foreach (var (pos, mesa, height) in _hills)
                 // {
                 //     threshold += Hill(pos, mesa, height, chunk, i);
                 // }
 
-                if (currentHeight == (int) threshold)
+                if (worldPos.y == (int) threshold)
                 {
                     blockToSet = Random.value < 0.08f ? BlockRegistry.Sand : BlockRegistry.Grass;
                 }
-                if (currentHeight < (int)threshold) blockToSet = BlockRegistry.Dirt;
-                if (currentHeight < (int) threshold - 10) blockToSet = BlockRegistry.Stone;
+                if (worldPos.y < (int)threshold) blockToSet = BlockRegistry.Dirt;
+                if (worldPos.y < (int) threshold - 10) blockToSet = BlockRegistry.Stone;
 
                 chunk.SetBlock(i, blockToSet.BlockId);
             }

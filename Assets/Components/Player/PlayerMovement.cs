@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
         
         // Get relevant input for camera rotation
         _lookVector = new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y"));
-        _lookVector = _lookVector * (900f * Time.deltaTime);
+        _lookVector *= 7f;
         _lookVector.x *= 1.3f;
 
         // Get current rotation and modify it
@@ -60,9 +60,9 @@ public class PlayerMovement : MonoBehaviour
         // Lateral player movement
         // Get relevant input
         _movementVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        var speed = 1000f;
+        var speed = 4f;
         if (Input.GetKey(KeyCode.LeftShift)) speed *= 2.1f;
-        _movementVector = _movementVector.normalized * (speed * Time.deltaTime);
+        _movementVector = _movementVector.normalized * (speed);
         _movementVector = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.up) * _movementVector;
         
         // Apply new velocity

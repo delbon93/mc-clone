@@ -21,23 +21,23 @@ namespace BlockGame.Components
 
         private void PreloadWorld ()
         {
-            // const int r = 3;
-            // for (var z = -r; z <= r; z++)
-            // {
-            //     for (var y = -1; y <= 1; y++)
-            //     {
-            //         for (var x = -r; x <= r; x++)
-            //         {
-                        var chunkGlobalPos = Vector3Int.zero;//new Vector3Int(x, y, z);
+            const int r = 1;
+            for (var z = -r; z <= r; z++)
+            {
+                for (var y = -1; y <= 1; y++)
+                {
+                    for (var x = -r; x <= r; x++)
+                    {
+                        var chunkGlobalPos = new Vector3Int(x, y, z);
                         var chunkData = World.GetChunkAtWorldPos(chunkGlobalPos);
                         var chunkObject = Instantiate(chunkPrefab, transform, true);
                         chunkObject.name = $"Chunk {chunkGlobalPos.x},{chunkGlobalPos.y},{chunkGlobalPos.z}";
                         chunkObject.transform.position = chunkGlobalPos * Chunk.ChunkSize;
                         chunkObject.ChunkData = chunkData;  
                         _chunkComponents.Add(chunkGlobalPos, chunkObject);
-            //         }
-            //     }
-            // }
+                    }
+                }
+            }
         }
 
         public ChunkComponent SetBlock (Vector3Int globalBlockPos, int blockId)
