@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody _rigidbody;
     private readonly PlayerViewRaycaster _raycaster = new PlayerViewRaycaster();
     private WorldComponent _worldComponent;
+
+    public bool CanJump { get; set; } = true;
     
     [SerializeField] public Camera playerCamera;
     [SerializeField] public Transform cameraAnchor;
@@ -72,9 +74,9 @@ public class PlayerMovement : MonoBehaviour
         _rigidbody.velocity = vel;
         
         // Player can jump if space is pressed
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && CanJump)
         {
-            _rigidbody.AddForce(Vector3.up * 5f, ForceMode.VelocityChange);
+            _rigidbody.AddForce(Vector3.up * 7f, ForceMode.VelocityChange);
         }
     }
 

@@ -137,7 +137,7 @@ PrefabInstance:
     - target: {fileID: 844983875971097080, guid: 9ac74e3b6227d3b488e204d90bea9ef8,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 844983875971097080, guid: 9ac74e3b6227d3b488e204d90bea9ef8,
         type: 3}
@@ -194,19 +194,8 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1621753640}
-    - target: {fileID: 6669513081366863133, guid: 9ac74e3b6227d3b488e204d90bea9ef8,
-        type: 3}
-      propertyPath: focussedBlockCube
-      value: 
-      objectReference: {fileID: 199845918}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ac74e3b6227d3b488e204d90bea9ef8, type: 3}
---- !u!4 &199845918 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7311464365915606275, guid: 9ac74e3b6227d3b488e204d90bea9ef8,
-    type: 3}
-  m_PrefabInstance: {fileID: 44412748}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &228713298
 GameObject:
   m_ObjectHideFlags: 0
