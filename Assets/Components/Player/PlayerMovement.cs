@@ -88,6 +88,11 @@ public class PlayerMovement : MonoBehaviour
         {
             raycastResult.ChunkData.SetBlock(raycastResult.BlockLocalPos, 0);
             raycastResult.ChunkComponent.InvalidateMesh();
+            foreach (var neighboringChunkIndex in raycastResult.ChunkData.GetNeighborsCoordsIfAtEdge(
+                raycastResult.BlockLocalPos))
+            {
+                _worldComponent.ChunkComponent(neighboringChunkIndex)?.InvalidateMesh();
+            }
         }
         
         // If the player right-clicks at a block, a new block is placed

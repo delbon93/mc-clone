@@ -63,7 +63,11 @@ namespace BlockGame.Components
             blockId = outBlockId;
             return chunkComponent;
         }
-        
+
+        public ChunkComponent ChunkComponent (Vector3Int chunkIndex)
+        {
+            return _chunkComponents.ContainsKey(chunkIndex) ? _chunkComponents[chunkIndex] : null;
+        }
     }
 
 }

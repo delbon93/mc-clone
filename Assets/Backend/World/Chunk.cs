@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace BlockGame.Backend
 {
@@ -40,6 +41,18 @@ namespace BlockGame.Backend
             return localBlockPos.x >= 0 && localBlockPos.x < ChunkSize
                                    && localBlockPos.y >= 0 && localBlockPos.y < ChunkSize
                                    && localBlockPos.z >= 0 && localBlockPos.z < ChunkSize;
+        }
+
+        public List<Vector3Int> GetNeighborsCoordsIfAtEdge (Vector3Int localBlockPos)
+        {
+            var list = new List<Vector3Int>();
+            if (localBlockPos.x == 0) list.Add(GlobalIndex + Vector3Int.left);
+            else if (localBlockPos.x == 15) list.Add(GlobalIndex + Vector3Int.right);
+            if (localBlockPos.y == 0) list.Add(GlobalIndex + Vector3Int.down);
+            else if (localBlockPos.y == 15) list.Add(GlobalIndex + Vector3Int.up);
+            if (localBlockPos.z == 0) list.Add(GlobalIndex + new Vector3Int(0, 0, -1));
+            else if (localBlockPos.z == 15) list.Add(GlobalIndex + new Vector3Int(0, 0, 1));
+            return list;
         }
         
         public static int LocalBlockPosToIndex (Vector3Int chunkPos)

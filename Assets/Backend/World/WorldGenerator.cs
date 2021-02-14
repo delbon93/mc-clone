@@ -38,12 +38,12 @@ namespace BlockGame.Backend
                 var blockToSet = BlockRegistry.Air;
                 var worldPos = chunk.GlobalIndex * Chunk.ChunkSize + Chunk.IndexToLocalBlockPos(i);
 
-                var threshold = -10 + Random.value < 0.2f ? Random.Range(-2, 2) : 0;
+                var threshold = Random.value < 0.05f ? Random.Range(-1, 1) : 0;
 
-                // foreach (var (pos, mesa, height) in _hills)
-                // {
-                //     threshold += Hill(pos, mesa, height, chunk, i);
-                // }
+                foreach (var (pos, mesa, height) in _hills)
+                {
+                    threshold += Hill(pos, mesa, height, chunk, i);
+                }
 
                 if (worldPos.y == (int) threshold)
                 {
