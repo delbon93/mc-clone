@@ -2,6 +2,7 @@
 using BlockGame.Components;
 using Components.Player;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -26,19 +27,24 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        HandleCamera();
-        HandleMovement();
-        HandleMouseInput();
+        UpdateCamera();
+        UpdateMovement();
+        UpdateMouseInput();
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
-    private void HandleCamera ()
+    private void UpdateCamera ()
     {
         // Update camera position
         playerCamera.transform.position = cameraAnchor.transform.position;
         
         // Get relevant input for camera rotation
         _lookVector = new Vector2(Input.GetAxisRaw("Mouse X"),Input.GetAxisRaw("Mouse Y"));
-        _lookVector *= 7f;
+        _lookVector *= 4.8f;
         _lookVector.x *= 1.3f;
 
         // Get current rotation and modify it
@@ -57,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(playerRotation);
     }
 
-    private void HandleMovement ()
+    private void UpdateMovement ()
     {
         // Lateral player movement
         // Get relevant input
@@ -80,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void HandleMouseInput ()
+    private void UpdateMouseInput ()
     {
         var raycastResult = _raycaster.GetRaycastTarget(cameraAnchor.transform.position,
             playerCamera.transform.forward);

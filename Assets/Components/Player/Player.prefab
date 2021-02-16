@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 844983875971097080}
   - component: {fileID: 844983875971097076}
   - component: {fileID: 844983875971097077}
-  - component: {fileID: 844983875971097078}
   - component: {fileID: 1645217406}
   - component: {fileID: 6669513081366863133}
   - component: {fileID: 7101575496964717114}
+  - component: {fileID: 326327041054672324}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -86,20 +86,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &844983875971097078
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 844983875971097081}
-  m_Material: {fileID: 13400000, guid: a8add1ba18a97094d94aaf335a47b86a, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1645217406
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -115,7 +101,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &6669513081366863133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,10 +126,24 @@ BoxCollider:
   m_GameObject: {fileID: 844983875971097081}
   m_Material: {fileID: 13400000, guid: a8add1ba18a97094d94aaf335a47b86a, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.8, y: 1.8, z: 0.8}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!64 &326327041054672324
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844983875971097081}
+  m_Material: {fileID: 13400000, guid: a8add1ba18a97094d94aaf335a47b86a, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &7094904935385922020
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +170,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7094904935385922020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.949, z: 0}
+  m_LocalPosition: {x: 0, y: -1.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 844983875971097080}
