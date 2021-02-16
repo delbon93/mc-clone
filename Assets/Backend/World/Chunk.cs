@@ -91,6 +91,8 @@ namespace BlockGame.Backend
 
         public Vector3 IndexToGlobalBlockPos (int i) => LocalBlockPosToGlobalBlockPos(IndexToLocalBlockPos(i));
 
-        
+
+        public static Vector3Int GlobalPositionToChunkIndex (Vector3 position) 
+            => Vector3Int.FloorToInt(position / ChunkSize);
     }
 }

@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody _rigidbody;
     private readonly PlayerViewRaycaster _raycaster = new PlayerViewRaycaster();
     private WorldComponent _worldComponent;
+    private Vector3Int _currentChunkIndex = Vector3Int.zero;
 
     public bool CanJump { get; set; } = true;
     
@@ -83,6 +84,13 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && CanJump)
         {
             _rigidbody.AddForce(Vector3.up * 7f, ForceMode.VelocityChange);
+        }
+
+        var chunkIndex = Chunk.GlobalPositionToChunkIndex(transform.position);
+        if (!chunkIndex.Equals(_currentChunkIndex))
+        {
+            _currentChunkIndex = chunkIndex;
+            GameEvents.OnEnterChunk(chunkIndex);
         }
     }
 

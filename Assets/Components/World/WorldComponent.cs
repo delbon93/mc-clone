@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Backend;
 using BlockGame.Backend;
 using UnityEngine;
 
@@ -29,15 +30,25 @@ namespace BlockGame.Components
                 {
                     for (var x = -r; x <= r; x++)
                     {
-                        var chunkGlobalPos = new Vector3Int(x, y, z);
-                        var chunkData = World.GetChunkAtWorldPos(chunkGlobalPos);
-                        var chunkObject = Instantiate(chunkPrefab, transform, true);
-                        chunkObject.name = $"Chunk {chunkGlobalPos.x},{chunkGlobalPos.y},{chunkGlobalPos.z}";
-                        chunkObject.transform.position = chunkGlobalPos * Chunk.ChunkSize;
-                        chunkObject.ChunkData = chunkData;  
-                        _chunkComponents.Add(chunkGlobalPos, chunkObject);
+                        CreateChunk(new Vector3Int(x, y, z));
                     }
                 }
+            }
+        }
+
+        private void CreateChunk (Vector3Int index)
+        {
+            var chunkData = World.GetChunkAtWorldPos(index);
+            var chunkObject = Instantiate(chunkPrefab, transform, true);
+            chunkObject.name = $"Chunk {index.x},{index.y},{index.z}";
+            chunkObject.transform.position = index * Chunk.ChunkSize;
+            chunkObject.ChunkData = chunkData;  
+            _chunkComponents.Add(index, chunkObject);
+            foreach (var dir in OrthoDirExtensions.All)
+            {
+                var neighborIndex = index + dir.ToVector3Int();
+                if (_chunkComponents.ContainsKey(neighborIndex))
+                    chunkObject.SetNeighbor(dir, _chunkComponents[neighborIndex]);
             }
         }
 
