@@ -11,13 +11,11 @@ public class JumpResetCollider : MonoBehaviour
     {
         if (other.gameObject.layer == 9)
             playerMovement.CanJump = true;
-        print("Enter!");
     }
 
     private void OnTriggerExit (Collider other)
     {
         if (other.gameObject.layer == 9)
             playerMovement.CanJump = false;
-        print("Exit!");
     }
 }

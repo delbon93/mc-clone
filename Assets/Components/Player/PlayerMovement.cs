@@ -32,9 +32,9 @@ public class PlayerMovement : MonoBehaviour
         UpdateMouseInput();
 
         if (Input.GetKeyDown(KeyCode.R))
-        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
+        if (Input.GetKeyDown(KeyCode.C))
+            GameEvents.OnToggleChunkBorders();
     }
 
     private void UpdateCamera ()

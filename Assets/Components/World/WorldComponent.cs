@@ -10,6 +10,7 @@ namespace BlockGame.Components
         [SerializeField] public ChunkComponent chunkPrefab;
         
         public World World { get; private set; }
+
         private readonly Dictionary<Vector3Int, ChunkComponent> _chunkComponents 
             = new Dictionary<Vector3Int, ChunkComponent>();
 

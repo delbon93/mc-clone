@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7772663398594548779
 Transform:
   m_ObjectHideFlags: 0
@@ -190,10 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bfa15eee3cd7374aa75af2604de6f8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockPrefab: {fileID: 348312814201431369, guid: c60017d17cc3baf4ea760fe4cbc2500d,
-    type: 3}
-  chunkMeshLoader: {fileID: 7083962874926518108, guid: 641652a8849ec1941b08190c56d5fa9c,
-    type: 3}
+  chunkBorderRenderer: {fileID: 7106097698485342257}
 --- !u!23 &-3648976008342103841
 MeshRenderer:
   m_ObjectHideFlags: 0

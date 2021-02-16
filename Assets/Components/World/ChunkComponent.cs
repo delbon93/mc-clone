@@ -11,6 +11,9 @@ namespace BlockGame.Components
         private Chunk _chunkData;
         private bool _meshInvalid = true;
         private WorldComponent _worldComponent;
+
+        [SerializeField] public LineRenderer chunkBorderRenderer;
+
         
         public Chunk ChunkData
         {
@@ -25,6 +28,18 @@ namespace BlockGame.Components
         private void Start ()
         {
             _worldComponent = FindObjectOfType<WorldComponent>();
+            GameEvents.ToggleChunkBorders += OnToggleChunkBorders;
+
+        }
+
+        private void OnToggleChunkBorders ()
+        {
+            chunkBorderRenderer.gameObject.SetActive(!chunkBorderRenderer.gameObject.activeSelf);
+        }
+
+        private void OnDestroy ()
+        {
+            GameEvents.ToggleChunkBorders -= OnToggleChunkBorders;
         }
 
         private void Update ()
