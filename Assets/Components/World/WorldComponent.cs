@@ -32,20 +32,28 @@ namespace BlockGame.Components
         
         private void GameEventsOnEnterChunk (Vector3Int index)
         {
+            StartCoroutine(nameof(ChunkLoadingCoroutine), index);
+        }
+
+        private IEnumerator ChunkLoadingCoroutine (Vector3Int index)
+        {
             var loadedIndices = new Vector3Int[_indexSphere.Count()];
             for (var i = 0; i < loadedIndices.Length; i++)
             {
                 loadedIndices[i] = _indexSphere[i] + index;
+                
             }
 
             var indicesToUnload = _chunkComponents.Keys.Except(loadedIndices).ToArray();
             foreach (var i in indicesToUnload)
             {
                 UnloadChunk(i);
+                yield return new WaitForSeconds(0.01f);
             }
             foreach (var i in loadedIndices)
             {
                 LoadChunk(i);
+                yield return new WaitForSeconds(0.01f);
             }
         }
 
