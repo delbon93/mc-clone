@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Backend;
@@ -21,9 +22,9 @@ namespace BlockGame.Components
 
         private List<Vector3Int> _indexSphere;
 
-        private void Start ()
+        private void Awake ()
         {
-            _indexSphere = Chunk.GetIndexSphere(3);
+            _indexSphere = Chunk.GetIndexSphere(4);
             
             World = new World();
             GameEvents.EnterChunk += GameEventsOnEnterChunk;
@@ -41,41 +42,31 @@ namespace BlockGame.Components
             for (var i = 0; i < loadedIndices.Length; i++)
             {
                 loadedIndices[i] = _indexSphere[i] + index;
-                
             }
 
             var indicesToUnload = _chunkComponents.Keys.Except(loadedIndices).ToArray();
             foreach (var i in indicesToUnload)
             {
                 UnloadChunk(i);
-                yield return new WaitForSeconds(0.01f);
+                //yield return null;
             }
             foreach (var i in loadedIndices)
             {
                 LoadChunk(i);
-                yield return new WaitForSeconds(0.01f);
+                yield return null;
             }
         }
 
         private void PreloadWorld ()
         {
-            const int r = 1;
-            for (var z = -r; z <= r; z++)
-            {
-                for (var y = -1; y <= 1; y++)
-                {
-                    for (var x = -r; x <= r; x++)
-                    {
-                        LoadChunk(new Vector3Int(x, y, z));
-                    }
-                }
-            }
+            foreach (var index in _indexSphere)
+                LoadChunk(index);
         }
 
         private void LoadChunk (Vector3Int index)
         {
             if (_chunkComponents.ContainsKey(index)) return;
-            
+
             var chunkData = World.GetChunkAtWorldPos(index);
 
             ChunkComponent chunkComponent;
@@ -91,8 +82,8 @@ namespace BlockGame.Components
             }
             
             chunkComponent.name = $"Chunk {index.x},{index.y},{index.z}";
-            chunkComponent.transform.position = index * Chunk.ChunkSize;
             chunkComponent.ChunkData = chunkData;  
+            chunkComponent.transform.position = index * Chunk.ChunkSize;
             _chunkComponents.Add(index, chunkComponent);
             foreach (var dir in OrthoDirExtensions.AllOrthogonal)
             {
@@ -103,6 +94,7 @@ namespace BlockGame.Components
                     _chunkComponents[neighborIndex].InvalidateMesh();
                 }
             }
+            
         }
 
         private void UnloadChunk (Vector3Int index)

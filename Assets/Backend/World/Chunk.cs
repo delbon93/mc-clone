@@ -109,6 +109,8 @@ namespace BlockGame.Backend
                     }
                 }
             }
+            
+            list.Sort((v1, v2) => v1.magnitude.CompareTo(v2.magnitude));
 
             return list;
         }

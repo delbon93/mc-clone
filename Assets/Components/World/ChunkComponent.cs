@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Backend;
 using BlockGame.Backend;
 using UnityEngine;
@@ -25,8 +26,11 @@ namespace BlockGame.Components
         };
 
         [SerializeField] public LineRenderer chunkBorderRenderer;
+        private MeshRenderer _meshRenderer;
+        private MeshFilter _meshFilter;
+        private MeshCollider _meshCollider;
 
-        
+
         public Chunk ChunkData
         {
             get => _chunkData;
@@ -39,6 +43,9 @@ namespace BlockGame.Components
 
         private void Start ()
         {
+            _meshCollider = GetComponent<MeshCollider>();
+            _meshFilter = GetComponent<MeshFilter>();
+            _meshRenderer = GetComponent<MeshRenderer>();
             _worldComponent = FindObjectOfType<WorldComponent>();
             GameEvents.ToggleChunkBorders += GameEventsOnToggleChunkBorders;
         }
@@ -66,11 +73,15 @@ namespace BlockGame.Components
             var mesh = new Mesh {vertices = vertices.ToArray(), triangles = triangles.ToArray(), uv = uvs.ToArray()};
             mesh.RecalculateNormals();
             mesh.Optimize();
-            GetComponent<MeshFilter>().mesh = mesh;
-            GetComponent<MeshCollider>().sharedMesh = mesh;
+            _meshFilter.mesh = mesh;
+            _meshCollider.sharedMesh = mesh;
+            
         }
 
-        public void InvalidateMesh () => _meshInvalid = true;
+        public void InvalidateMesh ()
+        {
+            _meshInvalid = true;
+        }
 
         public void SetNeighbor (Direction direction, ChunkComponent neighbor, bool setBoth = true)
         {

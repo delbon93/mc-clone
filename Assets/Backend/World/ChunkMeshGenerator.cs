@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BlockGame.Backend;
 using UnityEngine;
 
-namespace BlockGame.Components
+namespace BlockGame.Backend
 {
     public class ChunkMeshGenerator
     {
