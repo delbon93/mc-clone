@@ -10,7 +10,7 @@ namespace BlockGame.Backend
         public Vector2Int Left;
         public Vector2Int Front;
         public Vector2Int Back;
-        
+
         public TextureCoords (Vector2Int coords)
         {
             Top = Bottom = Left = Right = Front = Back = coords;

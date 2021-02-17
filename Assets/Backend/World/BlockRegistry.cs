@@ -32,7 +32,7 @@ namespace BlockGame.Backend
         private static readonly Dictionary<int, Block> BlockByIdCache = new Dictionary<int, Block>();
 
         // Examines all static fields of BlockRegistry to find the block that has the given id
-        public static Block GetBlockById (int blockId)
+        public static Block GetBlockById (short blockId)
         {
             if (BlockByIdCache.ContainsKey(blockId)) 
                 return BlockByIdCache[blockId];

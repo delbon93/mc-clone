@@ -10,18 +10,18 @@ namespace BlockGame.Backend
 
         public Vector3Int GlobalIndex { get; private set; }
 
-        private readonly int[] _blocks;
+        private readonly short[] _blocks;
 
         public Chunk (Vector3Int globalIndex)
         {
             GlobalIndex = globalIndex;
-            _blocks = new int [BlockCount];
+            _blocks = new short [BlockCount];
         }
 
-        public int GetBlock (int index) => _blocks[index];
-        public int GetBlock (Vector3Int localBlockPos) => GetBlock(LocalBlockPosToIndex(localBlockPos));
-        public void SetBlock (int index, int blockId) => _blocks[index] = blockId;
-        public void SetBlock (Vector3Int chunkPos, int blockId) => _blocks[LocalBlockPosToIndex(chunkPos)] = blockId;
+        public short GetBlock (int index) => _blocks[index];
+        public short GetBlock (Vector3Int localBlockPos) => GetBlock(LocalBlockPosToIndex(localBlockPos));
+        public void SetBlock (int index, short blockId) => _blocks[index] = blockId;
+        public void SetBlock (Vector3Int chunkPos, short blockId) => _blocks[LocalBlockPosToIndex(chunkPos)] = blockId;
 
         public bool[] GetBlockSolidAdjacencyField (Vector3Int chunkPos)
         {
@@ -71,8 +71,7 @@ namespace BlockGame.Backend
         public Vector3Int RaycastHitToLocalBlockPos (Vector3 point, Vector3 normal)
         {
             var pointInBlock = point - normal * 0.5f;
-            var globalBlockPos = new Vector3Int(
-                (int)Mathf.Floor(pointInBlock.x), (int)Mathf.Floor(pointInBlock.y), (int)Mathf.Floor(pointInBlock.z));
+            var globalBlockPos = Vector3Int.FloorToInt(pointInBlock);
             var chunkOrigin = GlobalIndex * ChunkSize;
             return globalBlockPos - chunkOrigin;
         }

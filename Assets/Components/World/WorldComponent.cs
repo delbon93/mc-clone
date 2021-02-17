@@ -24,7 +24,8 @@ namespace BlockGame.Components
 
         private void Awake ()
         {
-            _indexSphere = Chunk.GetIndexSphere(4);
+            var radius = 2;
+            _indexSphere = Chunk.GetIndexSphere(radius);
             
             World = new World();
             GameEvents.EnterChunk += GameEventsOnEnterChunk;
@@ -108,24 +109,25 @@ namespace BlockGame.Components
         }
 
 
-        public ChunkComponent SetBlock (Vector3Int globalBlockPos, int blockId)
+        public ChunkComponent SetBlock (Vector3Int globalBlockPos, short blockId)
         {
             return _chunkComponents[World.SetBlock(globalBlockPos, blockId).GlobalIndex];
         }
 
-        public ChunkComponent SetBlock (Vector3 globalBlockPos, int blockId)
+        public ChunkComponent SetBlock (Vector3 globalBlockPos, short blockId)
         {
             return SetBlock(Vector3Int.FloorToInt(globalBlockPos), blockId);
         }
 
-        public ChunkComponent GetBlock (Vector3Int globalBlockPos, out int blockId)
+        public ChunkComponent GetBlock (Vector3Int globalBlockPos, out short blockId)
         {
             var chunk = World.GetBlock(globalBlockPos, out var outBlockId);
             blockId = outBlockId;
             return _chunkComponents[chunk.GlobalIndex];
+            
         }
 
-        public ChunkComponent GetBlock (Vector3 globalBlockPos, out int blockId)
+        public ChunkComponent GetBlock (Vector3 globalBlockPos, out short blockId)
         {
             var chunkComponent = GetBlock(Vector3Int.FloorToInt(globalBlockPos), out var outBlockId);
             blockId = outBlockId;

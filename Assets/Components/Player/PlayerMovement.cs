@@ -1,4 +1,6 @@
-﻿using BlockGame.Backend;
+﻿using System;
+using System.Diagnostics;
+using BlockGame.Backend;
 using BlockGame.Components;
 using Components.Player;
 using UnityEngine;
@@ -13,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
     private WorldComponent _worldComponent;
     private Vector3Int _currentChunkIndex = Vector3Int.zero;
 
+    private short _selectedBlockId = BlockRegistry.Stone.BlockId;
+
     public bool CanJump { get; set; } = true;
     
     [SerializeField] public Camera playerCamera;
@@ -25,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         _worldComponent = FindObjectOfType<WorldComponent>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        GameEvents.OnChangeInventorySelection(_selectedBlockId);
     }
 
     private void Update()
@@ -56,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Clamp vertical camera movement 
         if (currentPlayerRotation.x > 180) currentPlayerRotation.x = currentPlayerRotation.x - 360f;
-        currentPlayerRotation.x = Mathf.Clamp(currentPlayerRotation.x, -85f, 85f);
+        currentPlayerRotation.x = Mathf.Clamp(currentPlayerRotation.x, -89f, 89f);
 
         // Apply new rotation
         playerCamera.transform.localRotation = Quaternion.Euler(currentPlayerRotation);
@@ -99,7 +104,6 @@ public class PlayerMovement : MonoBehaviour
     {
         var raycastResult = _raycaster.GetRaycastTarget(cameraAnchor.transform.position,
             playerCamera.transform.forward);
-        
         // If the player left-clicks at a block that is close enough, it is destroyed
         if (raycastResult.Success && Input.GetMouseButtonDown(0))
         {
@@ -112,10 +116,18 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         
+        // If the mouse wheel is scrolled, select a different block to place
+        var mouseWheel = Input.mouseScrollDelta.y > 0 ? 1 : (Input.mouseScrollDelta.y < 0 ? -1 : 0);
+        if (mouseWheel != 0)
+        {
+            _selectedBlockId = (short) Mathf.Clamp(_selectedBlockId + mouseWheel, 1, 6);
+            GameEvents.OnChangeInventorySelection(_selectedBlockId);
+        }
+
         // If the player right-clicks at a block, a new block is placed
         if (raycastResult.Success && Input.GetMouseButtonDown(1))
         {
-            _worldComponent.SetBlock(raycastResult.FacingBlockGlobalPos, (int)Random.Range(1, 7)).InvalidateMesh();
+            _worldComponent.SetBlock(raycastResult.FacingBlockGlobalPos, _selectedBlockId).InvalidateMesh();
         }
         
         // DEBUG: If the player middle-clicks at a block, its world position is printed to the console

@@ -30,7 +30,7 @@ namespace BlockGame.Backend
             ?? (generateOnDemand ? LoadChunk(worldPos) : default(Chunk));
         
         
-        public Chunk SetBlock (Vector3Int globalBlockPos, int blockId)
+        public Chunk SetBlock (Vector3Int globalBlockPos, short blockId)
         {
             var chunk = _loadedChunks.GetChunkByGlobalPos(globalBlockPos);
             if (chunk == default(Chunk)) return default(Chunk);
@@ -40,7 +40,7 @@ namespace BlockGame.Backend
             return chunk;
         }
 
-        public Chunk GetBlock (Vector3Int globalBlockPos, out int blockId)
+        public Chunk GetBlock (Vector3Int globalBlockPos, out short blockId)
         {
             var chunk = _loadedChunks.GetChunkByGlobalPos(globalBlockPos);
             if (chunk == default(Chunk))
@@ -58,7 +58,7 @@ namespace BlockGame.Backend
         {
             bool Check (Vector3Int delta)
             {
-                var chunk = GetBlock(globalBlockPos + delta, out int blockId);
+                var chunk = GetBlock(globalBlockPos + delta, out short blockId);
                 return chunk == null || BlockRegistry.GetBlockById(blockId).IsSolid;
             }
 
