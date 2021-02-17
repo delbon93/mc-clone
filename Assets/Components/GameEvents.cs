@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GameEvents : MonoBehaviour
 {
+    
     public delegate void ToggleChunkBordersEvent ();
     public delegate void EnterChunkEvent (Vector3Int chunkGlobalIndex);
     public delegate void ExitChunkEvent (Vector3Int chunkGlobalIndex);

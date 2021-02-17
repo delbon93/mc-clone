@@ -6,6 +6,8 @@ namespace BlockGame.Backend
 {
     public static class BlockRegistry
     {
+        public static int BlockCount = 9;
+        
         public static Block Air = new Block(0, "Air") { IsOpaque = false, IsSolid = false};
         public static Block Dirt = new Block(1, "Dirt") { ReprColor = new Color(0.5f, 0.32f, 0.23f), 
             TexCoords = new Vector2Int(0, 0)};
@@ -28,6 +30,8 @@ namespace BlockGame.Backend
             }
         };
         public static Block Leaves = new Block(6, "Leaves") { TexCoords = new Vector2Int(7, 0) };
+        public static Block Cobblestone = new Block(7, "Cobblestone") { TexCoords = new Vector2Int(8, 0)};
+        public static Block WoodPlanks = new Block(8, "Planks") { TexCoords = new Vector2Int(9, 0)};
 
         private static readonly Dictionary<int, Block> BlockByIdCache = new Dictionary<int, Block>();
 

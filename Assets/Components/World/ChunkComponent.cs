@@ -10,6 +10,8 @@ namespace BlockGame.Components
 {
     public class ChunkComponent : MonoBehaviour
     {
+        
+        private bool _chunkBorders = false;
 
         private Chunk _chunkData;
         private bool _meshInvalid = false;
@@ -25,11 +27,11 @@ namespace BlockGame.Components
             {Direction.Down, null}
         };
 
-        [SerializeField] public LineRenderer chunkBorderRenderer;
         private MeshRenderer _meshRenderer;
         private MeshFilter _meshFilter;
         private MeshCollider _meshCollider;
 
+        [SerializeField] public LineRenderer chunkBorderRenderer;
 
         public Chunk ChunkData
         {
@@ -52,7 +54,8 @@ namespace BlockGame.Components
 
         private void GameEventsOnToggleChunkBorders ()
         {
-            chunkBorderRenderer.gameObject.SetActive(!chunkBorderRenderer.gameObject.activeSelf);
+            _chunkBorders = !_chunkBorders;
+            chunkBorderRenderer.gameObject.SetActive(_chunkBorders);
         }
 
         private void OnDestroy ()

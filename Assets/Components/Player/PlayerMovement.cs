@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
         var mouseWheel = Input.mouseScrollDelta.y > 0 ? 1 : (Input.mouseScrollDelta.y < 0 ? -1 : 0);
         if (mouseWheel != 0)
         {
-            _selectedBlockId = (short) Mathf.Clamp(_selectedBlockId + mouseWheel, 1, 6);
+            _selectedBlockId = (short) Mathf.Clamp(_selectedBlockId + mouseWheel, 1, BlockRegistry.BlockCount - 1);
             GameEvents.OnChangeInventorySelection(_selectedBlockId);
         }
 
@@ -153,10 +153,12 @@ public class PlayerMovement : MonoBehaviour
             testCubeTransform.rotation = Quaternion.identity;
         }
 
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Tab))
         {
             Cursor.lockState = CursorLockMode.None; 
             Cursor.lockState = CursorLockMode.Locked;
         }
+        
+        if (Input.GetKey(KeyCode.Escape)) Application.Quit();
     }
 }

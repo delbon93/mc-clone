@@ -24,7 +24,7 @@ namespace BlockGame.Components
 
         private void Awake ()
         {
-            var radius = 2;
+            var radius = 4;
             _indexSphere = Chunk.GetIndexSphere(radius);
             
             World = new World();
@@ -76,6 +76,7 @@ namespace BlockGame.Components
             {
                 chunkComponent = _chunkPool.Get();
                 chunkComponent.gameObject.SetActive(true);
+                chunkComponent.GetComponent<MeshRenderer>().enabled = true;
             }
             else
             {
@@ -104,6 +105,7 @@ namespace BlockGame.Components
 
             var chunkComponent = _chunkComponents[index];
             chunkComponent.gameObject.SetActive(false);
+            chunkComponent.GetComponent<MeshRenderer>().enabled = false;
             _chunkComponents.Remove(index);
             _chunkPool.Free(chunkComponent);
         }

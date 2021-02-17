@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class ChunkOutlineRenderController : MonoBehaviour
 {
+    
+    
     [SerializeField] public LineRenderer lineRenderer;
 
     private void Start()
