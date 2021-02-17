@@ -7,6 +7,12 @@ public class JumpResetCollider : MonoBehaviour
 {
     [SerializeField] public PlayerMovement playerMovement;
 
+    private void Update ()
+    {
+        // ONLY BECAUSE IT DOESN'T WORK PROPERLY YET!
+        playerMovement.CanJump = true;
+    }
+
     private void OnTriggerEnter (Collider other)
     {
         if (other.gameObject.layer == 9)

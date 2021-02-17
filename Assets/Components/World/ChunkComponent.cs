@@ -11,17 +11,17 @@ namespace BlockGame.Components
     {
 
         private Chunk _chunkData;
-        private bool _meshInvalid = true;
+        private bool _meshInvalid = false;
         private WorldComponent _worldComponent;
 
-        private Dictionary<OrthoDir, ChunkComponent> _neighborComponents = new Dictionary<OrthoDir, ChunkComponent>()
+        private Dictionary<Direction, ChunkComponent> _neighborComponents = new Dictionary<Direction, ChunkComponent>()
         {
-            {OrthoDir.Back, null},
-            {OrthoDir.Forward, null},
-            {OrthoDir.Left, null},
-            {OrthoDir.Right, null},
-            {OrthoDir.Up, null},
-            {OrthoDir.Down, null}
+            {Direction.South, null},
+            {Direction.North, null},
+            {Direction.West, null},
+            {Direction.East, null},
+            {Direction.Up, null},
+            {Direction.Down, null}
         };
 
         [SerializeField] public LineRenderer chunkBorderRenderer;
@@ -40,17 +40,17 @@ namespace BlockGame.Components
         private void Start ()
         {
             _worldComponent = FindObjectOfType<WorldComponent>();
-            GameEvents.ToggleChunkBorders += OnToggleChunkBorders;
+            GameEvents.ToggleChunkBorders += GameEventsOnToggleChunkBorders;
         }
 
-        private void OnToggleChunkBorders ()
+        private void GameEventsOnToggleChunkBorders ()
         {
             chunkBorderRenderer.gameObject.SetActive(!chunkBorderRenderer.gameObject.activeSelf);
         }
 
         private void OnDestroy ()
         {
-            GameEvents.ToggleChunkBorders -= OnToggleChunkBorders;
+            GameEvents.ToggleChunkBorders -= GameEventsOnToggleChunkBorders;
         }
 
         private void Update ()
@@ -72,13 +72,13 @@ namespace BlockGame.Components
 
         public void InvalidateMesh () => _meshInvalid = true;
 
-        public void SetNeighbor (OrthoDir direction, ChunkComponent neighbor, bool setBoth = true)
+        public void SetNeighbor (Direction direction, ChunkComponent neighbor, bool setBoth = true)
         {
             _neighborComponents[direction] = neighbor;
             if (setBoth && neighbor != default(ChunkComponent)) 
                 neighbor.SetNeighbor(direction.Opposite(), this, false);
         }
 
-        public ChunkComponent GetNeighbor (OrthoDir direction) => _neighborComponents[direction];
+        public ChunkComponent GetNeighbor (Direction direction) => _neighborComponents[direction];
     }
 }

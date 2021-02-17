@@ -107,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
             foreach (var neighboringChunkIndex in raycastResult.ChunkData.GetNeighborsCoordsIfAtEdge(
                 raycastResult.BlockLocalPos))
             {
-                _worldComponent.ChunkComponent(neighboringChunkIndex)?.InvalidateMesh();
+                _worldComponent.GetChunkComponent(neighboringChunkIndex)?.InvalidateMesh();
             }
         }
         

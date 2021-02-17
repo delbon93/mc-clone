@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Backend;
 using BlockGame.Backend;
 using UnityEngine;
@@ -15,10 +17,36 @@ namespace BlockGame.Components
         private readonly Dictionary<Vector3Int, ChunkComponent> _chunkComponents 
             = new Dictionary<Vector3Int, ChunkComponent>();
 
+        private readonly ChunkComponentPool _chunkPool = new ChunkComponentPool();
+
+        private List<Vector3Int> _indexSphere;
+
         private void Start ()
         {
+            _indexSphere = Chunk.GetIndexSphere(3);
+            
             World = new World();
+            GameEvents.EnterChunk += GameEventsOnEnterChunk;
             PreloadWorld();
+        }
+        
+        private void GameEventsOnEnterChunk (Vector3Int index)
+        {
+            var loadedIndices = new Vector3Int[_indexSphere.Count()];
+            for (var i = 0; i < loadedIndices.Length; i++)
+            {
+                loadedIndices[i] = _indexSphere[i] + index;
+            }
+
+            var indicesToUnload = _chunkComponents.Keys.Except(loadedIndices).ToArray();
+            foreach (var i in indicesToUnload)
+            {
+                UnloadChunk(i);
+            }
+            foreach (var i in loadedIndices)
+            {
+                LoadChunk(i);
+            }
         }
 
         private void PreloadWorld ()
@@ -30,27 +58,55 @@ namespace BlockGame.Components
                 {
                     for (var x = -r; x <= r; x++)
                     {
-                        CreateChunk(new Vector3Int(x, y, z));
+                        LoadChunk(new Vector3Int(x, y, z));
                     }
                 }
             }
         }
 
-        private void CreateChunk (Vector3Int index)
+        private void LoadChunk (Vector3Int index)
         {
+            if (_chunkComponents.ContainsKey(index)) return;
+            
             var chunkData = World.GetChunkAtWorldPos(index);
-            var chunkObject = Instantiate(chunkPrefab, transform, true);
-            chunkObject.name = $"Chunk {index.x},{index.y},{index.z}";
-            chunkObject.transform.position = index * Chunk.ChunkSize;
-            chunkObject.ChunkData = chunkData;  
-            _chunkComponents.Add(index, chunkObject);
-            foreach (var dir in OrthoDirExtensions.All)
+
+            ChunkComponent chunkComponent;
+            
+            if (_chunkPool.HasFree())
+            {
+                chunkComponent = _chunkPool.Get();
+                chunkComponent.gameObject.SetActive(true);
+            }
+            else
+            {
+                chunkComponent = Instantiate(chunkPrefab, transform, true);
+            }
+            
+            chunkComponent.name = $"Chunk {index.x},{index.y},{index.z}";
+            chunkComponent.transform.position = index * Chunk.ChunkSize;
+            chunkComponent.ChunkData = chunkData;  
+            _chunkComponents.Add(index, chunkComponent);
+            foreach (var dir in OrthoDirExtensions.AllOrthogonal)
             {
                 var neighborIndex = index + dir.ToVector3Int();
                 if (_chunkComponents.ContainsKey(neighborIndex))
-                    chunkObject.SetNeighbor(dir, _chunkComponents[neighborIndex]);
+                {
+                    chunkComponent.SetNeighbor(dir, _chunkComponents[neighborIndex]);
+                    _chunkComponents[neighborIndex].InvalidateMesh();
+                }
             }
         }
+
+        private void UnloadChunk (Vector3Int index)
+        {
+            if (!_chunkComponents.ContainsKey(index)) return;
+
+            var chunkComponent = _chunkComponents[index];
+            chunkComponent.gameObject.SetActive(false);
+            _chunkComponents.Remove(index);
+            _chunkPool.Free(chunkComponent);
+        }
+
 
         public ChunkComponent SetBlock (Vector3Int globalBlockPos, int blockId)
         {
@@ -76,7 +132,7 @@ namespace BlockGame.Components
             return chunkComponent;
         }
 
-        public ChunkComponent ChunkComponent (Vector3Int chunkIndex)
+        public ChunkComponent GetChunkComponent (Vector3Int chunkIndex)
         {
             return _chunkComponents.ContainsKey(chunkIndex) ? _chunkComponents[chunkIndex] : null;
         }

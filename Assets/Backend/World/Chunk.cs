@@ -94,5 +94,24 @@ namespace BlockGame.Backend
 
         public static Vector3Int GlobalPositionToChunkIndex (Vector3 position) 
             => Vector3Int.FloorToInt(position / ChunkSize);
+
+        public static List<Vector3Int> GetIndexSphere (int radius)
+        {
+            var list = new List<Vector3Int>();
+            for (var z = -radius; z <= radius; z++)
+            {
+                for (var y = -radius; y <= radius; y++)
+                {
+                    for (var x = -radius; x <= radius; x++)
+                    {
+                        var v = new Vector3Int(x, y, z);
+                        if (v.magnitude <= radius) list.Add(v);
+                    }
+                }
+            }
+
+            return list;
+        }
+        
     }
 }
