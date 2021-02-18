@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using BlockGame.Components;
+using BlockGame.Components.World;
 using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public class ChunkComponentPool
     {
@@ -14,14 +15,14 @@ namespace BlockGame.Backend
         }
 
         public bool HasFree () => _chunkComponents.Count > 0;
-        
+
         public ChunkComponent Get ()
         {
             if (!HasFree()) return null;
-            
+
             var chunkComponent = _chunkComponents.First.Value;
             _chunkComponents.RemoveFirst();
-            
+
             return chunkComponent;
         }
 

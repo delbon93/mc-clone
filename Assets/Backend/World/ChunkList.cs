@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public class ChunkList : IChunkContainer
     {
@@ -13,14 +13,14 @@ namespace BlockGame.Backend
         public void RemoveChunk (Chunk chunk) => _chunks.Remove(chunk.GlobalIndex);
         public bool HasChunkAtGlobalChunkPos (Vector3Int worldPos) => _chunks.ContainsKey(worldPos);
 
-        public Chunk GetChunkByIndex (Vector3Int chunkIndex) 
+        public Chunk GetChunkByIndex (Vector3Int chunkIndex)
             => !_chunks.ContainsKey(chunkIndex) ? default : _chunks[chunkIndex];
 
         public Chunk GetChunkByGlobalPos (Vector3 pos)
         {
             pos /= Chunk.ChunkSize;
             var chunkCoords = new Vector3Int(
-                (int)Mathf.Floor(pos.x), (int)Mathf.Floor(pos.y), (int)Mathf.Floor(pos.z));
+                (int) Mathf.Floor(pos.x), (int) Mathf.Floor(pos.y), (int) Mathf.Floor(pos.z));
             return _chunks.ContainsKey(chunkCoords) ? _chunks[chunkCoords] : default;
         }
     }

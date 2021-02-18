@@ -3,25 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpResetCollider : MonoBehaviour
+namespace BlockGame.Components.Player
 {
-    [SerializeField] public PlayerMovement playerMovement;
-
-    private void Update ()
+    public class JumpResetCollider : MonoBehaviour
     {
-        // ONLY BECAUSE IT DOESN'T WORK PROPERLY YET!
-        playerMovement.CanJump = true;
-    }
+        [SerializeField] public PlayerMovement playerMovement;
 
-    private void OnTriggerEnter (Collider other)
-    {
-        if (other.gameObject.layer == 9)
+        private void Update ()
+        {
+            // ONLY BECAUSE IT DOESN'T WORK PROPERLY YET!
             playerMovement.CanJump = true;
-    }
+        }
 
-    private void OnTriggerExit (Collider other)
-    {
-        if (other.gameObject.layer == 9)
-            playerMovement.CanJump = false;
+        private void OnTriggerEnter (Collider other)
+        {
+            if (other.gameObject.layer == 9)
+                playerMovement.CanJump = true;
+        }
+
+        private void OnTriggerExit (Collider other)
+        {
+            if (other.gameObject.layer == 9)
+                playerMovement.CanJump = false;
+        }
     }
 }

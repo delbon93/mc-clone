@@ -1,4 +1,4 @@
-﻿namespace BlockGame.Backend
+﻿namespace BlockGame.Backend.World
 {
     public interface IWorldGenerator
     {

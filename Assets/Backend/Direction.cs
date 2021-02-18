@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Backend
+namespace BlockGame.Backend
 {
     /// <summary>
     /// x-Axis: West to East
@@ -12,11 +12,16 @@ namespace Backend
     public enum Direction
     {
         // -x  <->  +x
-        West, East, 
+        West,
+        East,
+
         // -y  <->  +y
-        Down, Up, 
+        Down,
+        Up,
+
         // -z  <->  +z
-        South, North
+        South,
+        North
     }
 
     public static class OrthoDirExtensions
@@ -28,7 +33,7 @@ namespace Backend
         {
             Direction.West, Direction.East, Direction.Up, Direction.Down, Direction.North, Direction.South
         };
-        
+
         public static Vector3Int ToVector3Int (this Direction direction)
         {
             switch (direction)
@@ -60,8 +65,5 @@ namespace Backend
         }
 
         public static IEnumerable<Direction> AllOrthogonal => OrthogonalDirections;
-
-        
-
     }
 }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public struct TextureCoords
     {

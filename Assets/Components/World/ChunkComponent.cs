@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Backend;
 using BlockGame.Backend;
+using BlockGame.Backend.World;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BlockGame.Components
+namespace BlockGame.Components.World
 {
     public class ChunkComponent : MonoBehaviour
     {
-        
         private bool _chunkBorders = false;
 
         private Chunk _chunkData;
@@ -70,7 +69,7 @@ namespace BlockGame.Components
 
         private void GenerateChunkMesh ()
         {
-            var (vertices, triangles, uvs) 
+            var (vertices, triangles, uvs)
                 = new ChunkMeshGenerator().GenerateMeshData(_chunkData, _worldComponent.World);
             _meshInvalid = false;
             var mesh = new Mesh {vertices = vertices.ToArray(), triangles = triangles.ToArray(), uv = uvs.ToArray()};
@@ -78,7 +77,6 @@ namespace BlockGame.Components
             mesh.Optimize();
             _meshFilter.mesh = mesh;
             _meshCollider.sharedMesh = mesh;
-            
         }
 
         public void InvalidateMesh ()
@@ -89,7 +87,7 @@ namespace BlockGame.Components
         public void SetNeighbor (Direction direction, ChunkComponent neighbor, bool setBoth = true)
         {
             _neighborComponents[direction] = neighbor;
-            if (setBoth && neighbor != default(ChunkComponent)) 
+            if (setBoth && neighbor != default(ChunkComponent))
                 neighbor.SetNeighbor(direction.Opposite(), this, false);
         }
 

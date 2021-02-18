@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BlockGame.Backend;
 using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public class ChunkMeshGenerator
     {
@@ -11,12 +11,12 @@ namespace BlockGame.Backend
         {
             Vector3.zero, Vector3.right, Vector3.forward, Vector3.forward + Vector3.right
         };
-        
+
         private static readonly Vector3[] TopFaceVertices = new[]
         {
             Vector3.up, Vector3.up + Vector3.forward, Vector3.up + Vector3.right, Vector3.one
         };
-        
+
         private static readonly Vector3[] FrontFaceVertices = new[]
         {
             Vector3.right + Vector3.forward, Vector3.one, Vector3.forward, Vector3.up + Vector3.forward
@@ -31,7 +31,7 @@ namespace BlockGame.Backend
         {
             Vector3.forward, Vector3.forward + Vector3.up, Vector3.zero, Vector3.up
         };
-        
+
         private static readonly Vector3[] RightFaceVertices = new[]
         {
             Vector3.right, Vector3.right + Vector3.up, Vector3.right + Vector3.forward, Vector3.one
@@ -50,7 +50,7 @@ namespace BlockGame.Backend
             var right = Vector2.right * scaleFactor;
             var up = Vector2.up * scaleFactor;
             var uvBase = new Vector2(texCoord.x * scaleFactor, 1f - texCoord.y * scaleFactor);
-            return new []
+            return new[]
             {
                 // uvBase, uvBase + up, uvBase + right, uvBase + up + right
                 // must be reverted, because for some reason the texture uv must be mirrored
@@ -72,7 +72,7 @@ namespace BlockGame.Backend
         private void AddBlockFace (Block block, Vector3Int blockChunkPos, IReadOnlyList<Vector3> faceVertices)
         {
             var vertexIndices = new int[4];
-            
+
             for (var i = 0; i < 4; i++)
             {
                 var vertex = faceVertices[i] + blockChunkPos;
@@ -80,10 +80,12 @@ namespace BlockGame.Backend
                 vertexIndices[i] = _vertexIndex;
                 _vertexIndex++;
             }
+
             for (var i = 0; i < 6; i++)
             {
                 _triangles.Add(vertexIndices[TriangleRelativeIndices[i]]);
             }
+
             _uvs.AddRange(TexCoordToUvs(GetTexCoordsForFace(faceVertices, block)));
         }
 
@@ -111,13 +113,13 @@ namespace BlockGame.Backend
                 CheckFace(5, FrontFaceVertices);
             }
         }
-        
-        public (List<Vector3> vertices, List<int> triangles, List<Vector2> uvs) 
+
+        public (List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
             GenerateMeshData (Chunk chunkData, World world)
         {
             BuildAllBlockFaces(chunkData, world);
 
-            
+
             return (_vertices, _triangles, _uvs);
         }
     }

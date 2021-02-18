@@ -2,15 +2,20 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public static class BlockRegistry
     {
         public static int BlockCount = 9;
-        
-        public static Block Air = new Block(0, "Air") { IsOpaque = false, IsSolid = false};
-        public static Block Dirt = new Block(1, "Dirt") { ReprColor = new Color(0.5f, 0.32f, 0.23f), 
-            TexCoords = new Vector2Int(0, 0)};
+
+        public static Block Air = new Block(0, "Air") {IsOpaque = false, IsSolid = false};
+
+        public static Block Dirt = new Block(1, "Dirt")
+        {
+            ReprColor = new Color(0.5f, 0.32f, 0.23f),
+            TexCoords = new Vector2Int(0, 0)
+        };
+
         public static Block Grass = new Block(2, "Grass")
         {
             ReprColor = Color.green,
@@ -20,25 +25,29 @@ namespace BlockGame.Backend
                 Bottom = new Vector2Int(0, 0)
             }
         };
+
         public static Block Stone = new Block(3, "Stone") {ReprColor = Color.grey, TexCoords = new Vector2Int(3, 0)};
         public static Block Sand = new Block(4, "Sand") {ReprColor = Color.yellow, TexCoords = new Vector2Int(4, 0)};
-        public static Block Log = new Block(5, "Log") { 
+
+        public static Block Log = new Block(5, "Log")
+        {
             TexCoords = new TextureCoords(new Vector2Int(5, 0))
             {
                 Top = new Vector2Int(6, 0),
                 Bottom = new Vector2Int(6, 0)
             }
         };
-        public static Block Leaves = new Block(6, "Leaves") { TexCoords = new Vector2Int(7, 0) };
-        public static Block Cobblestone = new Block(7, "Cobblestone") { TexCoords = new Vector2Int(8, 0)};
-        public static Block WoodPlanks = new Block(8, "Planks") { TexCoords = new Vector2Int(9, 0)};
+
+        public static Block Leaves = new Block(6, "Leaves") {TexCoords = new Vector2Int(7, 0)};
+        public static Block Cobblestone = new Block(7, "Cobblestone") {TexCoords = new Vector2Int(8, 0)};
+        public static Block WoodPlanks = new Block(8, "Planks") {TexCoords = new Vector2Int(9, 0)};
 
         private static readonly Dictionary<int, Block> BlockByIdCache = new Dictionary<int, Block>();
 
         // Examines all static fields of BlockRegistry to find the block that has the given id
         public static Block GetBlockById (short blockId)
         {
-            if (BlockByIdCache.ContainsKey(blockId)) 
+            if (BlockByIdCache.ContainsKey(blockId))
                 return BlockByIdCache[blockId];
             foreach (var field in typeof(BlockRegistry).GetFields(
                 System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public))

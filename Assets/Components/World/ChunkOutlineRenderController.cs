@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using BlockGame.Backend;
+using BlockGame.Backend.World;
 using UnityEngine;
 
-public class ChunkOutlineRenderController : MonoBehaviour
+namespace BlockGame.Components.World
 {
-    
-    
-    [SerializeField] public LineRenderer lineRenderer;
-
-    private void Start()
+    public class ChunkOutlineRenderController : MonoBehaviour
     {
-        for (var i = 0; i < lineRenderer.positionCount; i++)
-            lineRenderer.SetPosition(i, lineRenderer.GetPosition(i) * Chunk.ChunkSize);
+        [SerializeField] public LineRenderer lineRenderer;
+
+        private void Start ()
+        {
+            for (var i = 0; i < lineRenderer.positionCount; i++)
+                lineRenderer.SetPosition(i, lineRenderer.GetPosition(i) * Chunk.ChunkSize);
+        }
     }
 }

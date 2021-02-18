@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public struct Block
     {
@@ -12,7 +12,7 @@ namespace BlockGame.Backend
         public bool IsSolid { get; set; }
         public Color ReprColor { get; set; }
         public TextureCoords TexCoords { get; set; }
-        
+
 
         public Block (short blockId, string name = "NewBlock")
         {

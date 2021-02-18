@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public class World
     {
@@ -14,10 +14,10 @@ namespace BlockGame.Backend
             _worldGenerator = new WorldGenerator();
             _worldGenerator.Initialize();
         }
-        
+
         private Chunk LoadChunk (Vector3Int chunkIndex)
         {
-            if (_loadedChunks.HasChunkAtGlobalChunkPos(chunkIndex)) 
+            if (_loadedChunks.HasChunkAtGlobalChunkPos(chunkIndex))
                 return _loadedChunks.GetChunkByIndex(chunkIndex);
             var chunk = new Chunk(chunkIndex);
             _worldGenerator.GenerateChunk(ref chunk);
@@ -26,15 +26,15 @@ namespace BlockGame.Backend
         }
 
         public Chunk GetChunkAtWorldPos (Vector3Int worldPos, bool generateOnDemand = true) =>
-            _loadedChunks.GetChunkByIndex(worldPos) 
+            _loadedChunks.GetChunkByIndex(worldPos)
             ?? (generateOnDemand ? LoadChunk(worldPos) : default(Chunk));
-        
-        
+
+
         public Chunk SetBlock (Vector3Int globalBlockPos, short blockId)
         {
             var chunk = _loadedChunks.GetChunkByGlobalPos(globalBlockPos);
             if (chunk == default(Chunk)) return default(Chunk);
-            
+
             var localBlockPos = globalBlockPos - chunk.GlobalIndex * Chunk.ChunkSize;
             chunk.SetBlock(localBlockPos, blockId);
             return chunk;
@@ -48,12 +48,12 @@ namespace BlockGame.Backend
                 blockId = -1;
                 return default;
             }
-            
+
             var localBlockPos = globalBlockPos - chunk.GlobalIndex * Chunk.ChunkSize;
             blockId = chunk.GetBlock(localBlockPos);
             return chunk;
         }
-        
+
         public bool[] GetBlockSolidAdjacencyField (Vector3Int globalBlockPos)
         {
             bool Check (Vector3Int delta)

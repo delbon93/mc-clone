@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlockGame.Backend
+namespace BlockGame.Backend.World
 {
     public class Chunk
     {
@@ -25,7 +25,7 @@ namespace BlockGame.Backend
 
         public bool[] GetBlockSolidAdjacencyField (Vector3Int chunkPos)
         {
-            bool Check (Vector3Int delta) 
+            bool Check (Vector3Int delta)
                 => IsInChunkBounds(chunkPos + delta) && BlockRegistry.GetBlockById(GetBlock(chunkPos + delta)).IsSolid;
 
             return new bool[6]
@@ -39,8 +39,8 @@ namespace BlockGame.Backend
         private static bool IsInChunkBounds (Vector3Int localBlockPos)
         {
             return localBlockPos.x >= 0 && localBlockPos.x < ChunkSize
-                                   && localBlockPos.y >= 0 && localBlockPos.y < ChunkSize
-                                   && localBlockPos.z >= 0 && localBlockPos.z < ChunkSize;
+                                        && localBlockPos.y >= 0 && localBlockPos.y < ChunkSize
+                                        && localBlockPos.z >= 0 && localBlockPos.z < ChunkSize;
         }
 
         public List<Vector3Int> GetNeighborsCoordsIfAtEdge (Vector3Int localBlockPos)
@@ -54,7 +54,7 @@ namespace BlockGame.Backend
             else if (localBlockPos.z == 15) list.Add(GlobalIndex + new Vector3Int(0, 0, 1));
             return list;
         }
-        
+
         public static int LocalBlockPosToIndex (Vector3Int chunkPos)
         {
             return chunkPos.x + ChunkSize * chunkPos.y + ChunkSize * ChunkSize * chunkPos.z;
@@ -80,7 +80,7 @@ namespace BlockGame.Backend
         {
             var chunkOrigin = GlobalIndex * ChunkSize;
             var globalBlockPos = chunkOrigin + chunkPos;
-            return (Vector3)globalBlockPos + Vector3.one * 0.5f;
+            return (Vector3) globalBlockPos + Vector3.one * 0.5f;
         }
 
         public Vector3Int IndexToGlobalBlockIndex (int index)
@@ -91,7 +91,7 @@ namespace BlockGame.Backend
         public Vector3 IndexToGlobalBlockPos (int i) => LocalBlockPosToGlobalBlockPos(IndexToLocalBlockPos(i));
 
 
-        public static Vector3Int GlobalPositionToChunkIndex (Vector3 position) 
+        public static Vector3Int GlobalPositionToChunkIndex (Vector3 position)
             => Vector3Int.FloorToInt(position / ChunkSize);
 
         public static List<Vector3Int> GetIndexSphere (int radius)
@@ -108,11 +108,10 @@ namespace BlockGame.Backend
                     }
                 }
             }
-            
+
             list.Sort((v1, v2) => v1.magnitude.CompareTo(v2.magnitude));
 
             return list;
         }
-        
     }
 }
