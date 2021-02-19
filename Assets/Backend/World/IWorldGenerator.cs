@@ -3,6 +3,6 @@
     public interface IWorldGenerator
     {
         void Initialize ();
-        void GenerateChunk (ref Chunk chunk);
+        void GenerateChunk (ref Chunk chunk, GameData gameData);
     }
 }

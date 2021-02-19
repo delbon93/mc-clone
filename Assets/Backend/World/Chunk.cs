@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Data;
 using UnityEngine;
 
 namespace BlockGame.Backend.World
@@ -23,20 +24,9 @@ namespace BlockGame.Backend.World
         public void SetBlock (int index, short blockId) => _blocks[index] = blockId;
         public void SetBlock (Vector3Int chunkPos, short blockId) => _blocks[LocalBlockPosToIndex(chunkPos)] = blockId;
 
-        public bool[] GetBlockSolidAdjacencyField (Vector3Int chunkPos)
-        {
-            bool Check (Vector3Int delta)
-                => IsInChunkBounds(chunkPos + delta) && BlockRegistry.GetBlockById(GetBlock(chunkPos + delta)).IsSolid;
+        
 
-            return new bool[6]
-            {
-                Check(Vector3Int.left), Check(Vector3Int.right),
-                Check(Vector3Int.down), Check(Vector3Int.up),
-                Check(new Vector3Int(0, 0, -1)), Check(new Vector3Int(0, 0, 1))
-            };
-        }
-
-        private static bool IsInChunkBounds (Vector3Int localBlockPos)
+        public static bool IsInChunkBounds (Vector3Int localBlockPos)
         {
             return localBlockPos.x >= 0 && localBlockPos.x < ChunkSize
                                         && localBlockPos.y >= 0 && localBlockPos.y < ChunkSize

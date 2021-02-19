@@ -12,6 +12,7 @@ namespace BlockGame.Components.UI
         [SerializeField] public Texture2D blockTexture;
         [SerializeField] public Text text;
         private Image _image;
+        private GameData _gameData;
 
         private float _animationScale;
 
@@ -21,18 +22,19 @@ namespace BlockGame.Components.UI
         void Awake ()
         {
             _image = GetComponent<Image>();
+            _gameData = FindObjectOfType<GameData>();
             GameEvents.ChangeInventorySelection += GameEventsOnChangeInventorySelection;
         }
 
         private void GameEventsOnChangeInventorySelection (short newblockid)
         {
-            var block = BlockRegistry.GetBlockById(newblockid);
-            var coords = TextureScaleFactor * (Vector2) block.TexCoords.Front;
+            var block = _gameData.blockRegistry.GetBlockById(newblockid);
+            var coords = TextureScaleFactor * (Vector2) block.TexCoords.GetFrontal();
             coords.y = 240f - coords.y;
             var sprite = Sprite.Create(blockTexture, new Rect(coords, Vector2.one * TextureScaleFactor),
                 Vector2.zero);
             _image.sprite = sprite;
-            text.text = block.Name;
+            text.text = block.blockName;
 
             StartCoroutine(nameof(Animation));
         }

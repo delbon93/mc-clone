@@ -22,12 +22,15 @@ namespace BlockGame.Components.World
 
         private List<Vector3Int> _indexSphere;
 
+        private GameData _gameData;
+
         private void Awake ()
         {
             var radius = 4;
             _indexSphere = Chunk.GetIndexSphere(radius);
+            _gameData = FindObjectOfType<GameData>();
 
-            World = new Backend.World.World();
+            World = new Backend.World.World(_gameData);
             GameEvents.EnterChunk += GameEventsOnEnterChunk;
             PreloadWorld();
         }
@@ -125,6 +128,7 @@ namespace BlockGame.Components.World
         {
             var chunk = World.GetBlock(globalBlockPos, out var outBlockId);
             blockId = outBlockId;
+            if (chunk == null || !_chunkComponents.ContainsKey(chunk.GlobalIndex)) return null;
             return _chunkComponents[chunk.GlobalIndex];
         }
 
@@ -138,6 +142,22 @@ namespace BlockGame.Components.World
         public ChunkComponent GetChunkComponent (Vector3Int chunkIndex)
         {
             return _chunkComponents.ContainsKey(chunkIndex) ? _chunkComponents[chunkIndex] : null;
+        }
+        
+        public bool[] GetBlockSolidAdjacencyField (Vector3Int globalBlockPos)
+        {
+            bool Check (Vector3Int delta)
+            {
+                var chunk = GetBlock(globalBlockPos + delta, out short blockId);
+                return chunk == null || _gameData.blockRegistry.GetBlockById(blockId).isSolid;
+            }
+
+            return new bool[6]
+            {
+                Check(Vector3Int.left), Check(Vector3Int.right),
+                Check(Vector3Int.down), Check(Vector3Int.up),
+                Check(new Vector3Int(0, 0, -1)), Check(new Vector3Int(0, 0, 1))
+            };
         }
     }
 }

@@ -16,8 +16,9 @@ namespace BlockGame.Components.Player
         private readonly PlayerViewRaycaster _raycaster = new PlayerViewRaycaster();
         private WorldComponent _worldComponent;
         private Vector3Int _currentChunkIndex = Vector3Int.zero;
+        private GameData _gameData;
 
-        private short _selectedBlockId = BlockRegistry.Stone.BlockId;
+        private short _selectedBlockId = 2;
 
         public bool CanJump { get; set; } = true;
 
@@ -29,6 +30,7 @@ namespace BlockGame.Components.Player
         {
             _rigidbody = GetComponent<Rigidbody>();
             _worldComponent = FindObjectOfType<WorldComponent>();
+            _gameData = FindObjectOfType<GameData>();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             GameEvents.OnChangeInventorySelection(_selectedBlockId);
@@ -122,7 +124,8 @@ namespace BlockGame.Components.Player
             var mouseWheel = Input.mouseScrollDelta.y > 0 ? 1 : (Input.mouseScrollDelta.y < 0 ? -1 : 0);
             if (mouseWheel != 0)
             {
-                _selectedBlockId = (short) Mathf.Clamp(_selectedBlockId + mouseWheel, 1, BlockRegistry.BlockCount - 1);
+                _selectedBlockId = (short) Mathf.Clamp(_selectedBlockId + mouseWheel, 
+                    1, _gameData.blockRegistry.BlockCount - 1);
                 GameEvents.OnChangeInventorySelection(_selectedBlockId);
             }
 
@@ -136,10 +139,10 @@ namespace BlockGame.Components.Player
             if (raycastResult.Success && Input.GetMouseButtonDown(2))
             {
                 _worldComponent.GetBlock(raycastResult.BlockGlobalPos, out var blockId);
-                var block = BlockRegistry.GetBlockById(blockId);
+                var block = _gameData.blockRegistry.GetBlockById(blockId);
                 print(
                     Vector3Int.FloorToInt(raycastResult.BlockGlobalPos).ToString()
-                    + $" [id={blockId}, name={block.Name}]"
+                    + $" [id={blockId}, name={block.blockName}]"
                 );
             }
 

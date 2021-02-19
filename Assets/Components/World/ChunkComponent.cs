@@ -15,6 +15,7 @@ namespace BlockGame.Components.World
         private Chunk _chunkData;
         private bool _meshInvalid = false;
         private WorldComponent _worldComponent;
+        private GameData _gameData;
 
         private Dictionary<Direction, ChunkComponent> _neighborComponents = new Dictionary<Direction, ChunkComponent>()
         {
@@ -48,6 +49,7 @@ namespace BlockGame.Components.World
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
             _worldComponent = FindObjectOfType<WorldComponent>();
+            _gameData = FindObjectOfType<GameData>();
             GameEvents.ToggleChunkBorders += GameEventsOnToggleChunkBorders;
         }
 
@@ -70,7 +72,7 @@ namespace BlockGame.Components.World
         private void GenerateChunkMesh ()
         {
             var (vertices, triangles, uvs)
-                = new ChunkMeshGenerator().GenerateMeshData(_chunkData, _worldComponent.World);
+                = new ChunkMeshGenerator().GenerateMeshData(this, _worldComponent, _gameData);
             _meshInvalid = false;
             var mesh = new Mesh {vertices = vertices.ToArray(), triangles = triangles.ToArray(), uv = uvs.ToArray()};
             mesh.RecalculateNormals();
@@ -92,5 +94,19 @@ namespace BlockGame.Components.World
         }
 
         public ChunkComponent GetNeighbor (Direction direction) => _neighborComponents[direction];
+        
+        public bool[] GetBlockSolidAdjacencyField (Vector3Int chunkPos)
+        {
+            bool Check (Vector3Int delta)
+                => Chunk.IsInChunkBounds(chunkPos + delta) 
+                   && _gameData.blockRegistry.GetBlockById(_chunkData.GetBlock(chunkPos + delta)).isSolid;
+
+            return new bool[6]
+            {
+                Check(Vector3Int.left), Check(Vector3Int.right),
+                Check(Vector3Int.down), Check(Vector3Int.up),
+                Check(new Vector3Int(0, 0, -1)), Check(new Vector3Int(0, 0, 1))
+            };
+        }
     }
 }

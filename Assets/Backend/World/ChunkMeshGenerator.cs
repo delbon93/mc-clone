@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using BlockGame.Backend;
+using BlockGame.Components.World;
+using Data;
 using UnityEngine;
 
 namespace BlockGame.Backend.World
@@ -49,27 +51,27 @@ namespace BlockGame.Backend.World
             const float scaleFactor = 16f / 256f;
             var right = Vector2.right * scaleFactor;
             var up = Vector2.up * scaleFactor;
-            var uvBase = new Vector2(texCoord.x * scaleFactor, 1f - texCoord.y * scaleFactor);
+            var uvBase = new Vector2(texCoord.x * scaleFactor, 1f - (texCoord.y+1) * scaleFactor);
             return new[]
             {
-                // uvBase, uvBase + up, uvBase + right, uvBase + up + right
+                uvBase, uvBase + up, uvBase + right, uvBase + up + right
                 // must be reverted, because for some reason the texture uv must be mirrored
-                uvBase + up + right, uvBase + right, uvBase + up, uvBase
+                //uvBase + up + right, uvBase + right, uvBase + up, uvBase
             };
         }
 
-        private static Vector2Int GetTexCoordsForFace (IReadOnlyList<Vector3> faceVertices, Block block)
+        private static Vector2Int GetTexCoordsForFace (IReadOnlyList<Vector3> faceVertices, BlockType block)
         {
-            if (faceVertices == BackFaceVertices) return block.TexCoords.Back;
-            if (faceVertices == BottomFaceVertices) return block.TexCoords.Bottom;
-            if (faceVertices == FrontFaceVertices) return block.TexCoords.Front;
-            if (faceVertices == LeftFaceVertices) return block.TexCoords.Left;
-            if (faceVertices == RightFaceVertices) return block.TexCoords.Right;
-            if (faceVertices == TopFaceVertices) return block.TexCoords.Top;
+            if (faceVertices == BackFaceVertices) return block.TexCoords.GetCoordForFace(Direction.South);
+            if (faceVertices == BottomFaceVertices) return block.TexCoords.GetCoordForFace(Direction.Down);
+            if (faceVertices == FrontFaceVertices) return block.TexCoords.GetCoordForFace(Direction.North);
+            if (faceVertices == LeftFaceVertices) return block.TexCoords.GetCoordForFace(Direction.West);
+            if (faceVertices == RightFaceVertices) return block.TexCoords.GetCoordForFace(Direction.East);
+            if (faceVertices == TopFaceVertices) return block.TexCoords.GetCoordForFace(Direction.Up);
             return Vector2Int.zero;
         }
 
-        private void AddBlockFace (Block block, Vector3Int blockChunkPos, IReadOnlyList<Vector3> faceVertices)
+        private void AddBlockFace (BlockType block, Vector3Int blockChunkPos, IReadOnlyList<Vector3> faceVertices)
         {
             var vertexIndices = new int[4];
 
@@ -89,15 +91,15 @@ namespace BlockGame.Backend.World
             _uvs.AddRange(TexCoordToUvs(GetTexCoordsForFace(faceVertices, block)));
         }
 
-        private void BuildAllBlockFaces (Chunk chunkData, World world)
+        private void BuildAllBlockFaces (ChunkComponent chunk, WorldComponent world, GameData gameData)
         {
             for (var index = 0; index < Chunk.BlockCount; index++)
             {
-                var block = BlockRegistry.GetBlockById(chunkData.GetBlock(index));
-                if (!block.IsOpaque) continue;
+                var block = gameData.blockRegistry.GetBlockById(chunk.ChunkData.GetBlock(index));
+                if (!block.isOpaque) continue;
 
                 var localBlockPos = Chunk.IndexToLocalBlockPos(index);
-                var globalBlockPos = chunkData.IndexToGlobalBlockIndex(index);
+                var globalBlockPos = chunk.ChunkData.IndexToGlobalBlockIndex(index);
                 var field = world.GetBlockSolidAdjacencyField(globalBlockPos);
 
                 void CheckFace (int i, IReadOnlyList<Vector3> faceVertices)
@@ -115,9 +117,9 @@ namespace BlockGame.Backend.World
         }
 
         public (List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
-            GenerateMeshData (Chunk chunkData, World world)
+            GenerateMeshData (ChunkComponent chunk, WorldComponent world, GameData gameData)
         {
-            BuildAllBlockFaces(chunkData, world);
+            BuildAllBlockFaces(chunk, world, gameData);
 
 
             return (_vertices, _triangles, _uvs);
