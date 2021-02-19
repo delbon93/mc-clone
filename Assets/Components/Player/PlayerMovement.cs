@@ -17,6 +17,7 @@ namespace BlockGame.Components.Player
         private WorldComponent _worldComponent;
         private Vector3Int _currentChunkIndex = Vector3Int.zero;
         private GameData _gameData;
+        private BlockDebugInfo _blockDebugInfo;
 
         private int _selectedBlockIndex = 1;
 
@@ -31,6 +32,7 @@ namespace BlockGame.Components.Player
             _rigidbody = GetComponent<Rigidbody>();
             _worldComponent = FindObjectOfType<WorldComponent>();
             _gameData = FindObjectOfType<GameData>();
+            _blockDebugInfo = FindObjectOfType<BlockDebugInfo>();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             GameEvents.OnChangeInventorySelection(1);
@@ -46,6 +48,10 @@ namespace BlockGame.Components.Player
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             if (Input.GetKeyDown(KeyCode.C))
                 GameEvents.OnToggleChunkBorders();
+            if (_blockDebugInfo != null && Input.GetKeyDown(KeyCode.B))
+            {
+                _blockDebugInfo.ToggleShown();
+            }
         }
 
         private void UpdateCamera ()
@@ -143,12 +149,23 @@ namespace BlockGame.Components.Player
                 _worldComponent.SetBlock(raycastResult.FacingBlockGlobalPos, blockId).InvalidateMesh();
             }
 
-            // DEBUG: If the player middle-clicks at a block, its world position is printed to the console
-            if (raycastResult.Success && Input.GetMouseButtonDown(2))
+            var debugText = "";
+            if (raycastResult.Success && _blockDebugInfo != null)
             {
                 _worldComponent.GetBlock(raycastResult.BlockGlobalPos, out var blockId);
                 var block = _gameData.blockRegistry.ById(blockId);
-                print(block + " @ " + Vector3Int.FloorToInt(raycastResult.BlockGlobalPos));
+                debugText = block + "\n@\n" + Vector3Int.FloorToInt(raycastResult.BlockGlobalPos);
+                _blockDebugInfo.UpdateText(debugText);
+            }
+            else if (_blockDebugInfo != null)
+            {
+                _blockDebugInfo.UpdateText("");
+            }
+
+            // DEBUG: If the player middle-clicks at a block, its world position is printed to the console
+            if (raycastResult.Success && Input.GetMouseButtonDown(2))
+            {
+                print(debugText);
             }
 
             // Highlight the block the player is looking at, if close enough
