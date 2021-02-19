@@ -35,7 +35,7 @@ namespace BlockGame.Backend.World
             var BlockRegistry = gameData.blockRegistry;
             for (var i = 0; i < Chunk.BlockCount; i++)
             {
-                var blockToSet = BlockRegistry.GetBlockByName("air");
+                var blockToSet = BlockRegistry.ByName("air");
                 var worldPos = chunk.GlobalIndex * Chunk.ChunkSize + Chunk.IndexToLocalBlockPos(i);
 
                 var threshold = Random.value < 0.05f ? Random.Range(-1, 1) : 0;
@@ -48,11 +48,11 @@ namespace BlockGame.Backend.World
                 if (worldPos.y == (int) threshold)
                 {
                     blockToSet = Random.value < 0.08f ? 
-                        BlockRegistry.GetBlockByName("sand") : BlockRegistry.GetBlockByName("grass");
+                        BlockRegistry.ByName("sand") : BlockRegistry.ByName("grass");
                 }
 
-                if (worldPos.y < (int) threshold) blockToSet = BlockRegistry.GetBlockByName("dirt");
-                if (worldPos.y < (int) threshold - 10) blockToSet = BlockRegistry.GetBlockByName("stone");
+                if (worldPos.y < (int) threshold) blockToSet = BlockRegistry.ByName("dirt");
+                if (worldPos.y < (int) threshold - 10) blockToSet = BlockRegistry.ByName("stone");
 
                 chunk.SetBlock(i, blockToSet.blockId);
             }

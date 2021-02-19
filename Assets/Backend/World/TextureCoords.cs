@@ -9,12 +9,25 @@ namespace BlockGame.Backend.World
     public struct FaceTextureCoordOverride
     {
         [SerializeField] public Vector2Int textureCoordinate;
-        [SerializeField] public Direction[] directions;
+        [SerializeField] public bool west;
+        [SerializeField] public bool east;
+        [SerializeField] public bool up;
+        [SerializeField] public bool down;
+        [SerializeField] public bool north;
+        [SerializeField] public bool south;
 
-        public FaceTextureCoordOverride (Vector2Int coord, Direction[] directions)
+        public bool IsDirectionSet (Direction direction)
         {
-            textureCoordinate = coord;
-            this.directions = directions;
+            switch (direction)
+            {
+                case Direction.Down: return down;
+                case Direction.East: return east;
+                case Direction.North: return north;
+                case Direction.South: return south;
+                case Direction.Up: return up;
+                case Direction.West: return west;
+                default: return false;
+            }
         }
     }
     
@@ -34,7 +47,7 @@ namespace BlockGame.Backend.World
         {
             for (var i = 0; i < coordOverrides.Length; i++)
             {
-                if (coordOverrides[i].directions.Contains(faceDirection))
+                if (coordOverrides[i].IsDirectionSet(faceDirection))
                     return coordOverrides[i].textureCoordinate;
             }
             return defaultCoord;

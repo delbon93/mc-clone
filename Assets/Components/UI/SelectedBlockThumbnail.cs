@@ -28,7 +28,7 @@ namespace BlockGame.Components.UI
 
         private void GameEventsOnChangeInventorySelection (short newblockid)
         {
-            var block = _gameData.blockRegistry.GetBlockById(newblockid);
+            var block = _gameData.blockRegistry.ById(newblockid);
             var coords = TextureScaleFactor * (Vector2) block.TexCoords.GetFrontal();
             coords.y = 240f - coords.y;
             var sprite = Sprite.Create(blockTexture, new Rect(coords, Vector2.one * TextureScaleFactor),

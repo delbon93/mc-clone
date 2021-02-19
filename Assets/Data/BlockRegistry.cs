@@ -26,10 +26,15 @@ namespace Data
             reprColor = Color.white;
             TexCoords = Vector2Int.zero;
         }
+
+        public override string ToString ()
+        {
+            return $"[{blockName}: id={blockId}]";
+        }
     }
     
-    [CreateAssetMenu(fileName = "BlockTypes", menuName = "Blocks/BlockTypes", order = 0)]
-    public class BlockTypes : ScriptableObject
+    [CreateAssetMenu(fileName = "BlockRegistry", menuName = "Blocks/BlockRegistry", order = 0)]
+    public class BlockRegistry : ScriptableObject
     {
         [SerializeField] private BlockType[] blockTypes = new BlockType[]{};
         private readonly Dictionary<short, BlockType> _idCache = new Dictionary<short, BlockType>();
@@ -37,7 +42,7 @@ namespace Data
 
         public int BlockCount => blockTypes.Length;
 
-        public BlockType GetBlockById (short blockId)
+        public BlockType ById (short blockId)
         {
             if (_idCache.ContainsKey(blockId)) return _idCache[blockId];
             
@@ -50,7 +55,7 @@ namespace Data
             return _idCache[blockId];
         }
 
-        public BlockType GetBlockByName (string blockName)
+        public BlockType ByName (string blockName)
         {
             var lowerName = blockName.ToLower();
             if (_nameCache.ContainsKey(lowerName)) return _nameCache[lowerName];
@@ -63,5 +68,7 @@ namespace Data
 
             return _nameCache[lowerName];
         }
+
+        public BlockType ByRegistrationIndex (int index) => blockTypes[index];
     }
 }

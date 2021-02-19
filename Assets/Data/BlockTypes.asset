@@ -38,9 +38,19 @@ MonoBehaviour:
       defaultCoord: {x: 1, y: 0}
       coordOverrides:
       - textureCoordinate: {x: 2, y: 0}
-        directions: 03000000
+        west: 0
+        east: 0
+        up: 1
+        down: 0
+        north: 0
+        south: 0
       - textureCoordinate: {x: 0, y: 0}
-        directions: 02000000
+        west: 0
+        east: 0
+        up: 0
+        down: 1
+        north: 0
+        south: 0
   - blockName: Stone
     blockId: 3
     isOpaque: 1
@@ -66,7 +76,12 @@ MonoBehaviour:
       defaultCoord: {x: 5, y: 0}
       coordOverrides:
       - textureCoordinate: {x: 6, y: 0}
-        directions: 0300000002000000
+        west: 0
+        east: 0
+        up: 1
+        down: 1
+        north: 0
+        south: 0
   - blockName: Leaves
     blockId: 6
     isOpaque: 1
@@ -92,7 +107,7 @@ MonoBehaviour:
       defaultCoord: {x: 9, y: 0}
       coordOverrides: []
   - blockName: _TestBlock
-    blockId: 9
+    blockId: 9999
     isOpaque: 1
     isSolid: 1
     reprColor: {r: 1, g: 0, b: 1, a: 0}
@@ -100,14 +115,44 @@ MonoBehaviour:
       defaultCoord: {x: 0, y: 0}
       coordOverrides:
       - textureCoordinate: {x: 0, y: 1}
-        directions: 05000000
+        west: 0
+        east: 0
+        up: 0
+        down: 0
+        north: 1
+        south: 0
       - textureCoordinate: {x: 1, y: 1}
-        directions: 04000000
+        west: 0
+        east: 0
+        up: 0
+        down: 0
+        north: 0
+        south: 1
       - textureCoordinate: {x: 2, y: 1}
-        directions: 00000000
+        west: 1
+        east: 0
+        up: 0
+        down: 0
+        north: 0
+        south: 0
       - textureCoordinate: {x: 3, y: 1}
-        directions: 01000000
+        west: 0
+        east: 1
+        up: 0
+        down: 0
+        north: 0
+        south: 0
       - textureCoordinate: {x: 4, y: 1}
-        directions: 03000000
+        west: 0
+        east: 0
+        up: 1
+        down: 0
+        north: 0
+        south: 0
       - textureCoordinate: {x: 5, y: 1}
-        directions: 02000000
+        west: 0
+        east: 0
+        up: 0
+        down: 1
+        north: 0
+        south: 0

@@ -5,5 +5,5 @@ using UnityEngine;
 
 public class GameData : MonoBehaviour
 {
-    [SerializeField] public BlockTypes blockRegistry;
+    [SerializeField] public BlockRegistry blockRegistry;
 }

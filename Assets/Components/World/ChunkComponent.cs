@@ -99,7 +99,7 @@ namespace BlockGame.Components.World
         {
             bool Check (Vector3Int delta)
                 => Chunk.IsInChunkBounds(chunkPos + delta) 
-                   && _gameData.blockRegistry.GetBlockById(_chunkData.GetBlock(chunkPos + delta)).isSolid;
+                   && _gameData.blockRegistry.ById(_chunkData.GetBlock(chunkPos + delta)).isSolid;
 
             return new bool[6]
             {

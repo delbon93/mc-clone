@@ -95,7 +95,7 @@ namespace BlockGame.Backend.World
         {
             for (var index = 0; index < Chunk.BlockCount; index++)
             {
-                var block = gameData.blockRegistry.GetBlockById(chunk.ChunkData.GetBlock(index));
+                var block = gameData.blockRegistry.ById(chunk.ChunkData.GetBlock(index));
                 if (!block.isOpaque) continue;
 
                 var localBlockPos = Chunk.IndexToLocalBlockPos(index);

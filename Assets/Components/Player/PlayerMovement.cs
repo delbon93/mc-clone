@@ -18,7 +18,7 @@ namespace BlockGame.Components.Player
         private Vector3Int _currentChunkIndex = Vector3Int.zero;
         private GameData _gameData;
 
-        private short _selectedBlockId = 2;
+        private int _selectedBlockIndex = 1;
 
         public bool CanJump { get; set; } = true;
 
@@ -33,7 +33,7 @@ namespace BlockGame.Components.Player
             _gameData = FindObjectOfType<GameData>();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            GameEvents.OnChangeInventorySelection(_selectedBlockId);
+            GameEvents.OnChangeInventorySelection(1);
         }
 
         private void Update ()
@@ -124,26 +124,31 @@ namespace BlockGame.Components.Player
             var mouseWheel = Input.mouseScrollDelta.y > 0 ? 1 : (Input.mouseScrollDelta.y < 0 ? -1 : 0);
             if (mouseWheel != 0)
             {
-                _selectedBlockId = (short) Mathf.Clamp(_selectedBlockId + mouseWheel, 
-                    1, _gameData.blockRegistry.BlockCount - 1);
-                GameEvents.OnChangeInventorySelection(_selectedBlockId);
+                _selectedBlockIndex = (_selectedBlockIndex + mouseWheel) % _gameData.blockRegistry.BlockCount;
+                
+                if (_selectedBlockIndex == 0)
+                    if (mouseWheel < 0)
+                        _selectedBlockIndex = _gameData.blockRegistry.BlockCount - 1;
+                    else
+                        _selectedBlockIndex = 1;
+                
+                GameEvents.OnChangeInventorySelection(
+                    _gameData.blockRegistry.ByRegistrationIndex(_selectedBlockIndex).blockId);
             }
 
             // If the player right-clicks at a block, a new block is placed
             if (raycastResult.Success && Input.GetMouseButtonDown(1))
             {
-                _worldComponent.SetBlock(raycastResult.FacingBlockGlobalPos, _selectedBlockId).InvalidateMesh();
+                var blockId = _gameData.blockRegistry.ByRegistrationIndex(_selectedBlockIndex).blockId;
+                _worldComponent.SetBlock(raycastResult.FacingBlockGlobalPos, blockId).InvalidateMesh();
             }
 
             // DEBUG: If the player middle-clicks at a block, its world position is printed to the console
             if (raycastResult.Success && Input.GetMouseButtonDown(2))
             {
                 _worldComponent.GetBlock(raycastResult.BlockGlobalPos, out var blockId);
-                var block = _gameData.blockRegistry.GetBlockById(blockId);
-                print(
-                    Vector3Int.FloorToInt(raycastResult.BlockGlobalPos).ToString()
-                    + $" [id={blockId}, name={block.blockName}]"
-                );
+                var block = _gameData.blockRegistry.ById(blockId);
+                print(block + " @ " + Vector3Int.FloorToInt(raycastResult.BlockGlobalPos));
             }
 
             // Highlight the block the player is looking at, if close enough

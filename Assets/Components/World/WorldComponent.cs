@@ -149,7 +149,7 @@ namespace BlockGame.Components.World
             bool Check (Vector3Int delta)
             {
                 var chunk = GetBlock(globalBlockPos + delta, out short blockId);
-                return chunk == null || _gameData.blockRegistry.GetBlockById(blockId).isSolid;
+                return chunk == null || _gameData.blockRegistry.ById(blockId).isSolid;
             }
 
             return new bool[6]
